@@ -1,7 +1,7 @@
 ---
 title: "Bioinformática- GBI6"
 subtitle: "EXAMEN FINAL - 2022II"
-author: "APELLIDO, Nombre"
+author: "Flores, Juleth"
 date: "`r Sys.Date()`"
 output:
   html_document:
@@ -148,6 +148,21 @@ ggarrange(p3, ggarrange(p1, p2, labels =c("b", "c"), nrow=2),
 
 **INTERPRETACIÓN**
 
+
+En el cuadro A en el eje "y" representa el largo de los picos en nm, mientras que, en el eje "x" representa el ancho de los picos en mm de las tres especies de pingüinos encontrados en el archipiélago de Palmer, en la Antártica. Estas tres especies son los Chinstrap, Gentoo y Adélie. Donde la imagen indica la relación que hay entre las masas corporales y la longitud de la aleta de estas tres especies de pingüinos. 
+Dado que os gráficos fueron separados según el sexo y la cantidad de especies que habitan en el archipiélago de Palmer.
+
+Por ende, en los gráficos obtenidos se puede observar que no existe una relación debido a que el R2 no es un valor cercano a uno y se puede inferir que los valores sean aleatorios.
+En el cuadro B representa la longitud del pico en mm de las tres especies Chinstrap, Gentoo y Adélie donde ; la especie Gentoo tiene más longitud en su pico con aproximadamente 60 mm al par con la especie Chinstrap que aproximadamente tiene 58 mm de longitud en su pico mientras que, la especie Adélie cuenta con 45 mm de longitud en su pico.
+
+En el cuadro C representa el ancho de los picos de las especies de pingüinos Chinstrap, Gentoo y Adélie.
+Donde, la especie Chinstrap y Adélien obtuvieron aproximadamente 20 mm de ancho sus picos mientras que la especie Gentoo obtuvo 17.5 mm en el ancho de su pico.
+
+
+
+
+
+
 ### [3.0 puntos] 1.2. Genere dos gráficas `p4` y `p5`donde: 
 
 - `p4` es una regresión de `x: body_mass_g` y `y: flipper_length_mm`, que tiene inserto la ecuación de la regresión y el $R^2$. Asimismo tiene una coloración por sexo, y una separación por sexo e isla. 
@@ -171,8 +186,59 @@ cat(paste0('<center><img src="', img4,'" width="200" height="200" alt=""></cente
 # Escriba aquí su código
 
 ```
+datos ( " pingüinos " )
+# # `p4` es una regresión de `x: body_mass_g` y `y: flipper_length_mm`, que tiene inserto la ecuación de la regresión y el $R^2$. Asimismo tiene una coloración por sexo, y una separación por sexo e isla.
+pinguinos  = na.omit( pinguinos )
+p4  <- ggplot( pingüinos , aes( x = body_mass_g , y  =  flipper_length_mm ,   color = factor ( species ))) + geom_point( size = 0.5 , alpha = 0.5 ) + 
+  geom_smooth( método  =  " lm " , se  =  FALSO , na.rm  =  VERDADERO ) + facet_grid( factor ( isla ) ~ factor ( sexo )) + tema_clásico() + tema( leyenda.posición  =  " ninguno " ) + 
+  stat_poly_eq( coef.digits  =  2 ,use_label(c( " eq " , " adj.R2 " )), formula  =  y  ~ poly( x , 1 , raw  =  TRUE ),
+               etiqueta.x.npc  =  0.9 , etiqueta.y.npc  =  1.0 , cex = 3 ) + 
+  labs( x  =  " Masa Corporal [mm] " , y  =  " Longitud de la aleta [mm] " )
+install.packages( " ggcorrplot " )
+biblioteca ( ggcorrplot )
+val_num  <-  pingüinos [, - c( 1 , 2 , 7 , 8 )]
+corr  <- ronda(cor( num_val ), 1 )
+p.mat  <- cor_pmat( val_num )
+p5  <- ggcorrplot( corr , hc.order  =  TRUE , type  =  " lower " ,
+     esquema.col  =  " blanco " )
+```
+
+-  Se procedio a realizar  una figura 
+
+
+```{r echo = FALSO, resultados = 'asis'}
+img4  =  " resultado/ejercicio1.png "
+cat(paste0( ' <centro><img src=" ' , img4 , ' " ancho="200" altura="200" alt=""></centro> ' ))
+```
+
+
+```{r p1.1, echo=VERDADERO, advertencia=FALSO, fig.height=8}
+# Escriba aquí su código
+ggarrange( p3 , ggarrange( p1 , p2 , etiquetas  = c( " b " , " c " ), nrow = 2 ),
+          etiquetas  =  " a " , ncol = 2 )
+ggarrange( p3 , ggarrange( p5 , p4 , etiquetas  = c( " b " , " c " ), nfila = 2 ),
+          etiquetas  =  " a " , nrow  =  2 , ncol = 2 ,
+          ggarrange( p1 , p2 , etiquetas  = c( " e " , " d " ), ncol  =  2 ))
+                  
+```
+
+
+
+
 
 **INTERPRETACIÓN**
+
+En el primer grafico nos indica un mapa de calor preliminar que permite tener un primer vistazo del nivel de relación entre cada una de las muestras en base a la distancia euclideana.
+Donde, el color azul indica que hay 0 en distancia euclideana mientras que el color rojo indica que hay 150 en base a la distancia euclideana.
+
+El tiempo de exposición al tratamiento varía entre 24 y 48 horas
+El tipo de suero es HIHS y HS
+Las intensidades de color de las distancias esta en un rango de 0-150 de color verde claro a amarillo inteso.
+
+
+
+
+
 
 
 # [4.0 PUNTOS] 2. MAPAS DE CALOR DE EXPRESIÓN GÉNICA
@@ -238,6 +304,9 @@ Realice una descripción de lo que observa en el mapa de calor considerando:
 
 **INTERPRETACIÓN:** 
 
+La grafica indica que la muestra X10 presenta mas distancia mayor en los genes X18 y X4. Mientras que a la expresión del gen x10 presente mayor nivel de expresión en x18 y x4. 
+
+En conclusión, los mayores niveles de expresión se dieron en los tiempos más altos.
 
 
 ## [3.0 puntos] 2.2. Mapa de calor artritis reumatoide. 
@@ -271,7 +340,273 @@ cat(paste0('<center><img src="', img5,'" width="700" height="700" alt=""></cente
 ```
 ```{r}
 # Escriba aquí sus códigos
+
+``
+archivo tmp  <- archivo temporal ()
+descargar.archivo( ' https://github.com/kevinblighe/E-MTAB-6141/raw/master/rdata/mat.tsv ' ,
+tmpfile , método  =  ' automático ' )
+mat  <- read.table( tmpfile , sep  =  ' \t ' , fila.nombres  =  1 ,
+encabezado  =  VERDADERO , cadenas como factores  =  FALSO )
+archivo tmp  <- archivo temporal ()
+descargar.archivo( ' https://github.com/kevinblighe/E-MTAB-6141/raw/master/rdata/metadata.tsv ' ,
+tmpfile , método  =  ' automático ' )
+metadatos  <- read.table( tmpfile , sep  =  ' \t ' , fila.nombres  =  1 ,
+encabezado  =  VERDADERO , cadenas como factores  =  FALSO )
+archivo tmp  <- archivo temporal ()
+descargar.archivo( ' https://github.com/kevinblighe/E-MTAB-6141/raw/master/rdata/sig_genes.list ' ,
+tmpfile , método  =  ' automático ' )
+sig_genes  <- read.table( tmpfile , sep  =  ' \t ' ,
+encabezado  =  FALSO , cadenas como factores  =  FALSO ) [, 1 ]
+calor  <- t(escala(t( mat )))
+
+# # Se procede a generar el mapa 
+
+alor  <- t(escala(t( mat )))
+myCol  <- colorRampPalette(c( ' dodgerblue ' , ' black ' , ' yellow ' ))( 100 )
+  myBreaks  <- seq( - 3 , 3 , length.out  =  100 )
+  
+# # Se crea u  una gama de colores 
+
+# CD3
+cd3  <-  metadatos $ CD3
+cd3  <-  cd3 [ ! is.na( cd3 )] # elimina los valores faltantes - no queremos incluirlos en el mapeo
+pick.col  <- brewer.pal( 9 , ' Verdes ' )
+col.cd3  <- colorRampPalette( pick.col )(longitud(único( cd3 )))
+  # CD20
+cd20  <-  metadatos $ CD20
+cd20  <-  cd20 [ ! es.na( cd20 )]
+pick.col  <- brewer.pal( 9 , ' Blues ' )
+col.cd20  <- colorRampPalette( pick.col )(longitud(único( cd20 )))
+  # CD68L
+cd68L  <-  metadatos $ CD68L
+cd68L  <-  cd68L [ ! es.na( cd68L )]
+pick.col  <- brewer.pal( 9 , ' Rojos ' )
+col.cd68L  <- colorRampPalette( pick.col )(longitud(única( cd68L )))
+# CD68SL
+cd68SL  <-  metadatos $ CD68SL
+cd68SL  <-  cd68L [ ! es.na( cd68L )]
+pick.col  <- brewer.pal( 9 , ' Naranjas ' )
+col.cd68SL  <- colorRampPalette( pick.col )(longitud(única( cd68SL )))
+  # CD138
+cd138  <-  metadatos $ CD138
+cd138  <-  cd138 [ ! es.na( cd138 )]
+pick.col  <- brewer.pal( 9 , ' Púrpuras ' )
+col.cd138  <- colorRampPalette( pick.col )(longitud(única( cd68SL )))
+
+# # Se procede a realizar la leyenda de las anotaciones 
+
+ann  <-  datos.marco (
+    Patotipo  =  metadatos $ Patotipo ,
+    CD3  =  metadatos $ CD3 ,
+    CD20  =  metadatos $ CD20 ,
+    CD68L  =  metadatos $ CD68L ,
+    CD68SL  =  metadatos $ CD68SL ,
+    CD138  =  metadatos $ CD138 ,
+    cadenasAsFactors  =  FALSO )
+  # crear el mapeo de colores
+  colores  <-  lista (
+    Patotipo  = c( ' Linfoide '  =  ' azul ' , ' Mieloide '  =  ' rojo ' , ' Fibroide '  =  ' verde3 ' , ' Sin clasificar '  =  ' gris ' ),
+    CD3  = c( ' 0 '  =  ' #F7FCF5 ' , ' 1 '  =  ' #C7E9C0 ' , ' 2 '  =  ' #74C476 ' , ' 3 '  =  ' #238B45 ' , ' 4 '  =  ' #00441B ' ),
+    CD20  = c( ' 0 '  =  ' #F7FBFF ' , ' 1 '  =  ' #C6DBEF ' , ' 2 '  =  ' #6BAED6 ' , ' 3 '  =  ' #2171B5 ' , ' 4 '  =  ' #08306B ' ),
+    CD68L  = c( ' 0 '  =  ' #FFF5F0 ' , ' 1 '  =  ' #FCBBA1 ' , ' 2 '  =  ' #FB6A4A ' , ' 3 '  =  ' #CB181D ' , ' 4 '  =  ' #67000D ' ),
+    CD68SL  = c( ' 0 '  =  ' #FFF5EB ' , ' 1 '  =  ' #FDD0A2 ' , ' 2 '  =  ' #FD8D3C ' , ' 3 '  =  ' #D94801 ' , ' 4 '  =  ' #7F2704 ' ),
+    CD138  = c( ' 0 '  =  ' #FCFBFD ' , ' 1 '  =  ' #DADAEB ' , ' 2 '  =  ' #9E9AC8 ' , ' 3 '  =  ' #6A51A3 ' , ' 4 '  =  ' #3F007D ' ))
+
+
+# # Se crea el objeto de anotación ComplexHeatmap 
+
+colAnn  <- Anotación de mapa de calor (
+  df  =  ana ,
+  ¿cuál  =  anotación ' col ' , # 'col' (muestras) o 'fila' (gen)?
+  na_col  =  ' blanco ' , # color predeterminado para cualquier valor NA en el marco de datos de anotación, 'ann'
+  columna  =  colores ,
+  anotación_altura  =  0.6 ,
+  annotation_width  = unidad ( 1 , ' cm ' ),
+  brecha  = unidad ( 1 , ' mm ' ),
+  annotation_legend_param  =  lista (
+    Patotipo  =  lista (
+    nrow  =  4 , # número de filas en las que se organizará la leyenda
+    title  =  ' Patotipo ' ,
+    title_position  =  ' topcenter ' ,
+    legend_direction  =  ' vertical ' ,
+    title_gp  = gpar ( tamaño de fuente  =  12 , fuente  =  ' negrita ' ),
+    etiquetas_gp  = gpar ( tamaño de fuente  =  12 , fuente  =  ' negrita ' )),
+    CD3  =  lista (
+    nfila  =  5 ,
+    título  =  ' CD3 ' ,
+    title_position  =  ' topcenter ' ,
+    legend_direction  =  ' vertical ' ,
+    title_gp  = gpar ( tamaño de fuente  =  12 , fuente  =  ' negrita ' ),
+    etiquetas_gp  = gpar ( tamaño de fuente  =  12 , fuente  =  ' negrita ' )),
+    CD20  =  lista (
+    nfila  =  5 ,
+    título  =  ' CD20 ' ,
+    title_position  =  ' topcenter ' ,
+    legend_direction  =  ' vertical ' ,
+    title_gp  = gpar ( tamaño de fuente  =  12 , fuente  =  ' negrita ' ),
+    etiquetas_gp  = gpar ( tamaño de fuente  =  12 , fuente  =  ' negrita ' )),
+    CD68L  =  lista (
+    nfila  =  5 ,
+    título  =  ' CD68L ' ,
+    title_position  =  ' topcenter ' ,
+    legend_direction  =  ' vertical ' ,
+    title_gp  = gpar ( tamaño de fuente  =  12 , fuente  =  ' negrita ' ),
+    etiquetas_gp  = gpar ( tamaño de fuente  =  12 , fuente  =  ' negrita ' )),
+    CD68SL  =  lista (
+    nfila  =  5 ,
+    título  =  ' CD68SL ' ,
+    title_position  =  ' topcenter ' ,
+    legend_direction  =  ' vertical ' ,
+    title_gp  = gpar ( tamaño de fuente  =  12 , fuente  =  ' negrita ' ),
+    etiquetas_gp  = gpar ( tamaño de fuente  =  12 , fuente  =  ' negrita ' )),
+    CD138  =  lista (
+    nfila  =  5 ,
+    título  =  ' CD138 ' ,
+    title_position  =  ' topcenter ' ,
+    legend_direction  =  ' vertical ' ,
+    title_gp  = gpar ( tamaño de fuente  =  12 , fuente  =  ' negrita ' ),
+    etiquetas_gp  = gpar( tamaño de fuente  =  12 , fuente  =  ' negrita ' ))))
+
+
+# # Se realiza las etiqueutas de genes 
+
+etiquetasgenéticas  <- anotaciónfila(
+    Genes  = anno_mark(
+      en  = seq( 1 , nrow( calor ), 40 ),
+      etiquetas  = nombres de fila ( calor ) [seq ( 1 , nfila ( calor ), 40 )],
+      etiquetas_gp  = gpar ( tamaño de fuente  =  10 , fuente  =  ' negrita ' ),
+      relleno  =  0,75 ),
+      ancho  = unidad ( 2.0 , ' cm ' ) +
+      max_text_width(
+        nombres de fila ( calor ) [seq ( 1 , nrow ( calor ), 40 )],
+        gp  = gpar( tamaño de fuente  =  10 ,   fuente  =  ' negrita ' )))
+# # Se procede a realizar clústers 
+
+pamClusters  <-  cluster :: pam( calor , k  =  4 ) # preseleccionar k = 4 centros
+# ############################################# #############
+# ############################################# #############
+# #### EXISTE ERROR EN pamCLUSTER, no se puede guardar html #####
+# ############################################# ##############
+# ############################################# ##############
+  pamClusters $ agrupamiento  <- paste0( ' Clúster ' , pamClusters $ agrupamiento )
+  # arreglar el orden de los grupos para tener 1 a 4, de arriba a abajo
+  pamClusters $ agrupamiento  <-  factor ( pamClusters $ agrupamiento ,
+    niveles  = c( ' Grupo 1 ' , ' Grupo 2 ' , ' Grupo 3 ' , ' Grupo 4 ' ))
+
+
+# # Se procede a crear el mapa de calor  
+# dividir los genes/filas según los grupos PAM
+      split  =  pamClusters $ agrupamiento ,
+      cluster_row_slices  =  FALSO ,
+    name  =  ' Gene \n Z- \n score ' ,
+    col  = colorRamp2( myBreaks , myCol ),
+    # parámetros para la barra de color que representa el gradiente de expresión
+      heatmap_legend_param  =  lista (
+        color_bar  =  ' continuo ' ,
+        legend_direction  =  ' vertical ' ,
+        legend_width  = unidad ( 8 , ' cm ' ),
+        legend_height  = unidad ( 5.0 , ' cm ' ),
+        title_position  =  ' topcenter ' ,
+        title_gp = gpar ( tamaño de fuente  =  12 , fuente  =  ' negrita ' ),
+        etiquetas_gp = gpar ( tamaño de fuente  =  12 , fuente  =  ' negrita ' )),
+    # parámetros de fila (gen)
+      clúster_filas  =  VERDADERO ,
+      show_row_dend  =  VERDADERO ,
+      # row_title = 'Genes estadísticamente significativos',
+      row_title_side  =  ' izquierda ' ,
+      row_title_gp  = gpar( tamaño de fuente  =  12 ,   fuente  =  ' negrita ' ),
+      fila_título_rot  =  90 ,
+      mostrar_nombres_de_fila  =  FALSO ,
+      row_names_gp  = gpar( tamaño de fuente  =  10 , fuente  =  ' negrita ' ),
+      row_names_side  =  ' izquierda ' ,
+      row_dend_width  = unidad ( 25 , ' mm ' ),
+    # parámetros de columna (muestra)
+      cluster_columns  =  VERDADERO ,
+      show_column_dend  =  VERDADERO ,
+      título_columna  =  ' ' ,
+      column_title_side  =  ' abajo ' ,
+      column_title_gp  = gpar( fontsize  =  12 , fontface  =  ' negrita ' ),
+      columna_título_rot  =  0 ,
+      show_column_names  =  FALSO ,
+      column_names_gp  = gpar( fontsize  =  10 , fontface  =  ' negrita ' ),
+      column_names_max_height  = unidad ( 10 , ' cm ' ),
+      column_dend_height  = unidad ( 25 , ' mm ' ),
+    # métodos de clúster para filas y columnas
+      clustering_distance_columns  =  función ( x ) as.dist( 1  - cor(t( x ))),
+      clustering_method_columns  =  ' barrio.D2 ' ,
+      clustering_distance_rows  =  función ( x ) as.dist( 1  - cor(t( x ))),
+      clustering_method_rows  =  ' barrio.D2 ' ,
+
+
+# # Se procede a especificar las anotaciones de manera superior e inferior 
+
+ anotación_superior  =  colAnn ,
+      bottom_annotation  =  boxplotCol )
+# # grafico calor 1
+myCol  <- colorRampPalette(c( ' royalblue ' , ' white ' , ' red3 ' ))( 100 )
+  myBreaks  <- seq( - 1.5 , 1.5 , length.out  =  100 )
+  hmap1  <- Mapa de calor ( calor ,
+    name  =  ' Gene Z-score ' ,
+    col  = colorRamp2( myBreaks , myCol ),
+    heatmap_legend_param  =  lista (
+      color_bar  =  ' continuo ' ,
+      dirección_leyenda  =  ' horizontal ' ,
+      legend_width  = unidad ( 8 , ' cm ' ),
+      legend_height  = unidad ( 5.0 , ' cm ' ),
+      title_position  =  ' topcenter ' ,
+      title_gp = gpar ( tamaño de fuente  =  30 , fuente  =  ' negrita ' ),
+      etiquetas_gp = gpar( tamaño de fuente  =  24 , fuente  =  ' negrita ' )),
+    clúster_filas  =  VERDADERO ,
+    show_row_dend  =  VERDADERO ,
+    row_title  =  ' Genes estadísticamente significativos ' ,
+    row_title_side  =  ' izquierda ' ,
+    row_title_gp  = gpar( tamaño de fuente  =  30 ,   fuente  =  ' negrita ' ),
+    fila_título_rot  =  90 ,
+    mostrar_nombres_de_fila  =  FALSO ,
+    row_names_gp  = gpar( tamaño de fuente  =  11 , fuente  =  ' negrita ' ),
+    row_names_side  =  ' izquierda ' ,
+    row_dend_width  = unidad ( 25 , ' mm ' ),
+    cluster_columns  =  VERDADERO ,
+    show_column_dend  =  VERDADERO ,
+    column_title  =  ' Muestras ' ,
+    column_title_side  =  ' abajo ' ,
+    column_title_gp  = gpar( fontsize  =  30 , fontface  =  ' negrita ' ),
+    columna_título_rot  =  0 ,
+    show_column_names  =  FALSO ,
+    column_names_gp  = gpar( fontsize  =  8 , fontface  =  ' negrita ' ),
+    column_names_max_height  = unidad ( 10 , ' cm ' ),
+    column_dend_height  = unidad ( 25 , ' mm ' ),
+    clustering_distance_columns  =  función ( x ) as.dist( 1  - cor(t( x ))),
+    clustering_method_columns  =  ' barrio.D2 ' ,
+    clustering_distance_rows  =  función ( x ) as.dist( 1  - cor(t( x ))),
+    clustering_method_rows  =  ' barrio.D2 ' )
+  myCol  <- colorRampPalette(c( ' verde bosque ' , ' negro ' , ' violeta ' ))( 100 )
+  myBreaks  <- seq( - 2 , 2 , length.out  =  100 )
 ```
+
+Por ende, se carga los  datos `EMTAB6141.rdata` que se requieren para este ejercicio. Requiere usar:
+
+-  `'mat.tsv'`
+
+-  `'metadatos.tsv'`
+
+-  `'sig_genes.lista'`
+
+```{r}
+# Cargue aqui sus datos
+```
+
+En la siguiente celda de código, realice la réplica del mapa de calor que se encuentra a la izquierda ( `hmap1` ) de esta figura:
+
+```{r echo = FALSO, resultados = 'asis'}
+img5  =  " https://github.com/kevinblighe/E-MTAB-6141/raw/master/README_files/figure-gfm/clusterheatmap_fig2-1.png "
+cat(paste0( ' <centro><img src=" ' , img5 , ' " ancho="700" altura="700" alt=""></centro> ' ))
+```
+```{r}
+#Escriba aqui sus codigos
+```
+
+
 
 **INTERPRETACIÓN:**
 
